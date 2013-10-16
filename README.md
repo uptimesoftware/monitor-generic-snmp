@@ -7,13 +7,13 @@ See http://uptimesoftware.github.io for more information.
 
 ### Category
 
-{ page.category }}
+plugin
 
 ### Version Compatibility
 
 
   
-    * Generic SNMP 1.0 - 7.2
+* Generic SNMP 1.0 - 7.2
   
 
 
@@ -37,12 +37,43 @@ None; no agent required
 
 
 ### Input Variables
-* SNMP Version - SNMP version (1/2/3)* SNMP Port - the port SNMP is listening on* SNMP Action - SNMP Walk/Get* SNMP Data Type - integer/string* SNMP OID - the SNMP OID to get. This is used for both SNMP Walk and Get.* SNMP Table Index OID (Walk) - specify the SNMP OID to use for the index of SNMP Walk data* SNMP Table Index Filter - if there is specific index that one wants to include, provide regex meeting the criteria.* Community String(v1/v2) - SNMP Community String for SNMP V1 or V2* Agent Username (v3)* Authentication Type (v3)* Authentication Passphrase (v3)* Privacy Type (v3)* Privacy Passphrase (v3)
+
+* SNMP Version - SNMP version (1/2/3)
+
+* SNMP Port - the port SNMP is listening on
+
+* SNMP Action - SNMP Walk/Get
+
+* SNMP Data Type - integer/string
+
+* SNMP OID - the SNMP OID to get. This is used for both SNMP Walk and Get.
+
+* SNMP Table Index OID (Walk) - specify the SNMP OID to use for the index of SNMP Walk data
+
+* SNMP Table Index Filter - if there is specific index that one wants to include, provide regex meeting the criteria.
+
+* Community String(v1/v2) - SNMP Community String for SNMP V1 or V2
+
+* Agent Username (v3)
+
+* Authentication Type (v3)
+
+* Authentication Passphrase (v3)
+
+* Privacy Type (v3)
+
+* Privacy Passphrase (v3)
+
 
 ### Output Variables
 
-* Returned Data (Integer)* Returned Data (String)
+
+* Returned Data (Integer)
+
+* Returned Data (String)
+
 
 ### Languages Used
+
 * PHP
 
