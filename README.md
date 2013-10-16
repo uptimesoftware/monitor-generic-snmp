@@ -1,53 +1,48 @@
-# IBM AS400 Monitor
-## Tags : plugin   as400  
+# Generic SNMP
 
-## Category: plugin
+See http://uptimesoftware.github.io for more information.
 
-##Version Compatibility<br/>Module Name</th><th>up.time Monitoring Station Version</th>
+### Tags 
+ plugin   snmp   networking  
+
+### Category
+
+{ page.category }}
+
+### Version Compatibility
 
 
   
-    * IBM AS400 Monitor 2.2 - 7.2, 7.1
-  
-
-  
-    * IBM AS400 Monitor 2.1 - 7.0
-  
-
-  
-    * IBM AS400 Monitor 2.0 - 6.0
-  
-
-  
-    * IBM AS400 Monitor 1.1 - 5.5
+    * Generic SNMP 1.0 - 7.2
   
 
 
-### Description: Monitor CPU/Memory performance on an IBM (iSeries) AS/400 server.
-
-### Supported Monitoring Stations: 7.2, 7.1
-### Supported Agents: None; no agent required
-### Installation Notes: <p><a href="https://github.com/uptimesoftware/uptime-plugin-manager">Install using the up.time Plugin Manager</a>
-1. Currently there is a limitation with the max upload size in Apache (&lt;2MB) so we'll have to increase it first.</p>
-
-<p>Edit the php.ini file and modify the options below.</p>
-
-<p>Windows Monitoring Station location: [uptime_dir]\apache\php\php.ini
-Linux/Solaris Monitoring Station location: [uptime_dir]/apache/conf/php.ini</p>
-
-<p>; Maximum size of POST data that PHP will accept.
-post_max_size = 100M
-; Maximum allowed size for uploaded files.
-upload_max_filesize = 100M</p>
-
-<ol>
-<li>Restart the up.time Web Server for the changes to go into effect.</li>
-</ol>
+### Description
+This plug-in allows user to monitor any SNMP OID without having to add the MIB's to up.time. It also allows users to include filters so only certain data is included/excluded.
 
 
-### Dependencies: <p>n/a</p>
+### Supported Monitoring Stations
 
-### Input Variables: * AS/400 user name* AS/400 password
-### Output Variables: * Basic Monitor (MonitorAS400.xml)* CPU Utilization* Disk Free* Number of Jobs* CURSTG (memory)* PTF Monitor (MonitorAS400ptf.xml)* Message Count (number of messages)
-### Languages Used: * Java
+7.2
+
+### Supported Agents
+None; no agent required
+
+### Installation Notes
+<p><a href="https://github.com/uptimesoftware/uptime-plugin-manager">Install using the up.time Plugin Manager</a></p>
+
+
+### Dependencies
+<p>n/a</p>
+
+
+### Input Variables
+* SNMP Version - SNMP version (1/2/3)* SNMP Port - the port SNMP is listening on* SNMP Action - SNMP Walk/Get* SNMP Data Type - integer/string* SNMP OID - the SNMP OID to get. This is used for both SNMP Walk and Get.* SNMP Table Index OID (Walk) - specify the SNMP OID to use for the index of SNMP Walk data* SNMP Table Index Filter - if there is specific index that one wants to include, provide regex meeting the criteria.* Community String(v1/v2) - SNMP Community String for SNMP V1 or V2* Agent Username (v3)* Authentication Type (v3)* Authentication Passphrase (v3)* Privacy Type (v3)* Privacy Passphrase (v3)
+
+### Output Variables
+
+* Returned Data (Integer)* Returned Data (String)
+
+### Languages Used
+* PHP
 

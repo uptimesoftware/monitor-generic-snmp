@@ -44,71 +44,7 @@
                 <string/>
             </gui_type>
         </element>
-		<element name="snmpaction" parameter_type="input" data_type="string" gui_basic="1"
-				range_type="0" units="">
-            <control_options>size:8</control_options>
-            <default_value/>
-            <short_description>SNMP Action</short_description>
-            <long_description>SNMP Action</long_description>
-            <validation_rule/>
-            <error_message/>
-            <gui_type>
-                <single_select type="dropdown">
-                    <value>Get</value>
-                    <value>Walk</value>
-                </single_select>
-            </gui_type>
-        </element>
-		<element name="data_type" parameter_type="input" data_type="string" gui_basic="1"
-				range_type="0" units="">
-            <control_options>size:8</control_options>
-            <default_value/>
-            <short_description>SNMP Data Type</short_description>
-            <long_description>SNMP Data Type</long_description>
-            <validation_rule/>
-            <error_message/>
-            <gui_type>
-                <single_select type="dropdown">
-                    <value>Integer</value>
-                    <value>String</value>
-                </single_select>
-            </gui_type>
-        </element>
-		<element name="snmp-oid" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
-            <control_options>size:8</control_options>
-            <default_value/>
-            <short_description>SNMP OID</short_description>
-            <long_description>SNMP OID</long_description>
-            <validation_rule/>
-            <error_message/>
-            <gui_type>
-				<string/>
-            </gui_type>
-        </element>
-		<element name="snmp-walk-index" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
-            <control_options>size:8</control_options>
-            <default_value/>
-            <short_description>SNMP Table Index OID (Walk)</short_description>
-            <long_description>SNMP Table Index OID (Walk)</long_description>
-            <validation_rule/>
-            <error_message/>
-            <gui_type>
-				<string/>
-            </gui_type>
-        </element>
-		<element name="snmp-walk-index-include" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
-            <control_options>size:8</control_options>
-            <default_value/>
-            <short_description>SNMP Table Index Filter</short_description>
-            <long_description>SNMP Table Index Filter</long_description>
-            <validation_rule/>
-            <error_message/>
-            <gui_type>
-				<string/>
-            </gui_type>
-        </element>
-        
-        <element name="read-community" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
+		<element name="read-community" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
             <control_options>size:8</control_options>
             <default_value/>
             <short_description>Community String(v1/v2)</short_description>
@@ -181,6 +117,69 @@
             <error_message/>
             <gui_type>
                 <password/>
+            </gui_type>
+        </element>
+		<element name="snmpaction" parameter_type="input" data_type="string" gui_basic="1"
+				range_type="0" units="">
+            <control_options>size:8</control_options>
+            <default_value/>
+            <short_description>SNMP Action</short_description>
+            <long_description>SNMP Action</long_description>
+            <validation_rule/>
+            <error_message/>
+            <gui_type>
+                <single_select type="dropdown">
+                    <value>Get</value>
+                    <value>Walk</value>
+                </single_select>
+            </gui_type>
+        </element>
+		<element name="data_type" parameter_type="input" data_type="string" gui_basic="1"
+				range_type="0" units="">
+            <control_options>size:8</control_options>
+            <default_value/>
+            <short_description>SNMP Data Type</short_description>
+            <long_description>SNMP Data Type</long_description>
+            <validation_rule/>
+            <error_message/>
+            <gui_type>
+                <single_select type="dropdown">
+                    <value>Integer</value>
+                    <value>String</value>
+                </single_select>
+            </gui_type>
+        </element>
+		<element name="snmp-oid" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
+            <control_options>size:8</control_options>
+            <default_value/>
+            <short_description>SNMP OID</short_description>
+            <long_description>SNMP OID</long_description>
+            <validation_rule/>
+            <error_message/>
+            <gui_type>
+				<string/>
+            </gui_type>
+        </element>
+		<element name="snmp-walk-index" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
+            <control_options>size:8</control_options>
+            <default_value/>
+            <short_description>SNMP Table Index OID (Walk)</short_description>
+            <long_description>SNMP Table Index OID (Walk)</long_description>
+            <validation_rule/>
+            <error_message/>
+            <gui_type>
+				<string/>
+            </gui_type>
+        </element>
+		<element name="snmp-walk-index-include" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
+            <control_options>size:8</control_options>
+            <default_value/>
+            <short_description>SNMP Table Index Filter</short_description>
+            <long_description>SNMP Table Index Filter</long_description>
+            <validation_rule/>
+            <error_message/>
+            <gui_type>
+				<string/>
             </gui_type>
         </element>
         <element name="returnedDataInt" parameter_type="output" data_type="ranged" gui_basic="1" range_type="0" units="">
