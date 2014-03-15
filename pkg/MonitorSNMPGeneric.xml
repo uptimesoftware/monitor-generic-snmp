@@ -5,11 +5,18 @@
 	xmlns:upt="http://www.uptimesoftware.com/erdc/erdc" version="4.0" target_grouping="other">
     <class>Generic SNMP</class>
 	<exec>com.uptimesoftware.uptime.erdc.MonitorCustomScriptRunner</exec>
-	
+    <erdc_version>1.0</erdc_version>
+    <category>Network Device Monitors</category>
+    <grid_info>
+        <supported_versions>7.3</supported_versions>
+        <supported_platforms>windows, linux</supported_platforms>
+        <upgrade_in_place>true</upgrade_in_place>
+        <requires_agent_scripts>false</requires_agent_scripts>
+    </grid_info>
     <elements>
-		<element name="process" parameter_type="input" data_type="string" gui_basic="1" range_type="0">
+		<element name="process_windows" parameter_type="input" data_type="string" gui_basic="1" range_type="0" hidden="true">
 			<control_options> size:40 </control_options>
-			<default_value>scripts/MonitorSNMPGeneric/MonitorSNMPGeneric.bat</default_value>
+			<default_value>plugins/scripts/MonitorSNMPGeneric/MonitorSNMPGeneric.bat</default_value>
 			<short_description>Script Name</short_description>
 			<long_description>Name of the script/binary/process to be executed by up.time </long_description>
 			<validation_rule><alphanumeric/></validation_rule>
@@ -18,6 +25,17 @@
 				<string/>
 			</gui_type>
 		</element>
+        <element name="process_linux" parameter_type="input" data_type="string" gui_basic="1" range_type="0" hidden="true">
+            <control_options> size:40 </control_options>
+            <default_value>plugins/scripts/MonitorSNMPGeneric/MonitorSNMPGeneric.sh</default_value>
+            <short_description>Script Name</short_description>
+            <long_description>Name of the script/binary/process to be executed by up.time </long_description>
+            <validation_rule><alphanumeric/></validation_rule>
+            <error_message><alphanumeric>required field</alphanumeric></error_message>
+            <gui_type>
+                <string/>
+            </gui_type>
+        </element>
 		<element name="snmpversion" parameter_type="input" data_type="string" gui_basic="1" range_type="0" units="">
             <control_options>size:8</control_options>
             <default_value>v1</default_value>
