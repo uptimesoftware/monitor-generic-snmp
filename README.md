@@ -1,4 +1,4 @@
-# Generic SNMP
+# Monitor Generic SNMP
 
 See http://uptimesoftware.github.io for more information.
 
