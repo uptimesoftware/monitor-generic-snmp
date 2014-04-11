@@ -235,6 +235,5 @@
             </gui_type>
         </element>
     </elements>
-    <help>Monitor SNMP OIDs directly without MIBs. 
-    </help>
+    <help>Monitor SNMP OIDs directly without MIBs.</help>
 </uptime>
