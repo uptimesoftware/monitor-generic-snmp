@@ -136,7 +136,7 @@ if($SNMP_action == "Get") {
 	$dataType = getDataType($returnedDataRaw);
 	//if($dataType == "integer") {
 	if($SNMP_Data_Type == "Integer") {
-		echo "returnedDataInt ".$returnedData."\n";
+		echo "1.returnedDataInt ".$returnedData."\n";
 		//echo "returnedDataString notAString\n";
 	} else {
 		//echo "returnedDataInt 0\n";
