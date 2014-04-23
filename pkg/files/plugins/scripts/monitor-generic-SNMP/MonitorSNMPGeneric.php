@@ -125,7 +125,7 @@
 	}
 
 // Test if connection info is correct
-if ($returnedData == false) {
+if ($returnedData === false) {
 	
 	echo $SNMP_OID."Fail to get SNMP Data! Please check credentials\n";
 	exit(2);
