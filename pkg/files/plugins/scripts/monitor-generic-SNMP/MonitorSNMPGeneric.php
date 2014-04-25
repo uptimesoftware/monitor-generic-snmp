@@ -55,26 +55,51 @@
 				exit(2);
 		}
 	}
+
+	//lets force errors to get raised as exceptions,
+	//so that we can catch timeouts/connection issues from php_snmp
+	set_error_handler('handleError');
 	
 	if($SNMP_version == "v1") {
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmpget($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
-			$returnedData = parseData($returnedDataRaw);
-		} elseif($SNMP_action == "Walk") {
-			$returnedDataRaw = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);			//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 
 			$returnedData = parseData($returnedDataRaw);
-			$returnedIndex = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);		//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+		} elseif($SNMP_action == "Walk") {
+			try {
+				$returnedDataRaw = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);			//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+				$returnedIndex = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);		//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
+			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = parseData($returnedIndex);
 		}
 	} elseif($SNMP_version == "v2") {
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmp2_get($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 			$returnedData = parseData($returnedDataRaw);
 		} elseif($SNMP_action == "Walk") {
+			try {
 			$returnedDataRaw = snmp2_real_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);			//modified by Isaiah - used the 'snmp2_real_walk' function instead of 'snmp2_walk'
-			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = snmp2_real_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);		//modified by Isaiah - used the 'snmp2_real_walk' function instead of 'snmp2_walk'
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
+
+			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = parseData($returnedIndex);
 		}
 
@@ -112,12 +137,23 @@
 		}
 		
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmp3_get($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_OID);
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 			$returnedData = parseData($returnedDataRaw);
 		} elseif($SNMP_action == "Walk") {
+
+			try {
 			$returnedDataRaw = snmp3_real_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_OID);		//modified by Isaiah - used the 'snmp3_real_walk' function instead of 'snmp3_walk'
-			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = snmp3_real_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_WALK_INDEX_OID);	//modified by Isaiah - used the 'snmp3_real_walk' function instead of 'snmp3_walk'		
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
+			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = parseData($returnedIndex);
 		}
 		
@@ -125,7 +161,7 @@
 	}
 
 // Test if connection info is correct
-if ($returnedData == false) {
+if ($returnedData === false) {
 	
 	echo $SNMP_OID."Fail to get SNMP Data! Please check credentials\n";
 	exit(2);
@@ -256,6 +292,21 @@ function get64($msb, $lsb) {
 	return $value;
 }
 
+function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
+{
+    // error was suppressed with the @-operator
+    if (0 === error_reporting()) {
+        return false;
+    }
+
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+
+function exitWithUnknownStatus($msg)
+{
+	echo $msg;
+	exit(3);
+}
 
 
 
