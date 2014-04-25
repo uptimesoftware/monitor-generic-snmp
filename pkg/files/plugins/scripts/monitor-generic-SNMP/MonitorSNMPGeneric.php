@@ -8,7 +8,6 @@
 	$SNMP_WALK_INDEX_OID_INCLUDE = "/".$SNMP_WALK_INDEX_OID_INCLUDE."/";
 	
 	$SNMP_Data_Type = getenv('UPTIME_DATA_TYPE');
-	//$SNMP_Data_Type = "string";
 	
 	$SNMP_Community = getenv('UPTIME_READ-COMMUNITY');
 	
@@ -56,26 +55,51 @@
 				exit(2);
 		}
 	}
+
+	//lets force errors to get raised as exceptions,
+	//so that we can catch timeouts/connection issues from php_snmp
+	set_error_handler('handleError');
 	
 	if($SNMP_version == "v1") {
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmpget($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
-			$returnedData = parseData($returnedDataRaw);
-		} elseif($SNMP_action == "Walk") {
-			$returnedDataRaw = snmpwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 
 			$returnedData = parseData($returnedDataRaw);
-			$returnedIndex = snmpwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);
+		} elseif($SNMP_action == "Walk") {
+			try {
+				$returnedDataRaw = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);			//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+				$returnedIndex = snmprealwalk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);		//modified by Isaiah - used the 'snmprealwalk' function instead of 'snmpwalk'
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
+			$returnedData = parseData($returnedDataRaw);
 			$returnedIndex = parseData($returnedIndex);
 		}
 	} elseif($SNMP_version == "v2") {
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmp2_get($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 			$returnedData = parseData($returnedDataRaw);
 		} elseif($SNMP_action == "Walk") {
-			$returnedDataRaw = snmp2_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);
+			try {
+			$returnedDataRaw = snmp2_real_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_OID);			//modified by Isaiah - used the 'snmp2_real_walk' function instead of 'snmp2_walk'
+			$returnedIndex = snmp2_real_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);		//modified by Isaiah - used the 'snmp2_real_walk' function instead of 'snmp2_walk'
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
+
 			$returnedData = parseData($returnedDataRaw);
-			$returnedIndex = snmp2_walk($SNMP_Connection_String,$SNMP_Community,$SNMP_WALK_INDEX_OID);
 			$returnedIndex = parseData($returnedIndex);
 		}
 
@@ -113,12 +137,23 @@
 		}
 		
 		if($SNMP_action == "Get") {
+			try {
 			$returnedDataRaw = snmp3_get($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_OID);
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 			$returnedData = parseData($returnedDataRaw);
 		} elseif($SNMP_action == "Walk") {
-			$returnedDataRaw = snmp3_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_OID);
+
+			try {
+			$returnedDataRaw = snmp3_real_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_OID);		//modified by Isaiah - used the 'snmp3_real_walk' function instead of 'snmp3_walk'
+			$returnedIndex = snmp3_real_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_WALK_INDEX_OID);	//modified by Isaiah - used the 'snmp3_real_walk' function instead of 'snmp3_walk'		
+			}
+			catch (Exception $e) {
+				exitWithUnknownStatus("Unable to Retrieve OID");
+			}
 			$returnedData = parseData($returnedDataRaw);
-			$returnedIndex = snmp3_walk($SNMP_Connection_String,$SNMP_v3_agent,$SNMP_sec_level,$SNMP_v3_auth_type,$SNMP_v3_auth_pass,$SNMP_v3_priv_type,$SNMP_v3_priv_pass,$SNMP_WALK_INDEX_OID);			
 			$returnedIndex = parseData($returnedIndex);
 		}
 		
@@ -126,27 +161,24 @@
 	}
 
 // Test if connection info is correct
-if ($returnedData == false) {
+if ($returnedData === false) {
 	
 	echo $SNMP_OID."Fail to get SNMP Data! Please check credentials\n";
 	exit(2);
 }
 
 if($SNMP_action == "Get") {
-	$dataType = getDataType($returnedDataRaw);
-	//if($dataType == "integer") {
+
 	if($SNMP_Data_Type == "Integer") {
-		echo "returnedDataInt ".$returnedData."\n";
-		//echo "returnedDataString notAString\n";
+		echo "1.returnedDataInt ".$returnedData."\n";
 	} else {
-		//echo "returnedDataInt 0\n";
 		echo "returnedDataString ".$returnedData."\n";
 	}
 
 } elseif($SNMP_action == "Walk") {
-	$dataType = getDataType($returnedDataRaw[0]);
-	$returnedData_count = count($returnedData);
-	for($i=0; $i < $returnedData_count; $i++) {
+
+	$dataType = getDataType(reset($returnedDataRaw));				//Added by Isaiah - a different method of getting the first element in the array that may not be indexed with a zero (0)
+	foreach (array_keys($returnedData) as $i) {					//Added by Isaiah - iterate through each element of the array non-numerically
 		//echo $returnedIndex[$i]."\n";
 		$returnedIndex[$i] = str_replace(".","-",$returnedIndex[$i]);
 		$returnedIndex[$i] = str_replace("\"","",$returnedIndex[$i]);
@@ -157,15 +189,15 @@ if($SNMP_action == "Get") {
 			$SNMP_Walk_Matched = true;
 			if($SNMP_Data_Type == "Integer") {
 				echo $returnedIndex[$i].".returnedDataInt ". $returnedData[$i]."\n";
-				//echo $returnedIndex[$i].".returnedDataString notAString\n";
+
 				
 			} else {
-				//echo $returnedIndex[$i].".returnedDataInt 0\n";
+
 				echo $returnedIndex[$i].".returnedDataString ".$returnedData[$i]."\n";
 			}
-			//echo "returnedDataRaw[$i]===".$returnedDataRaw[$i]."\n";
+
 		}
-		//echo "returnedData.".$returnedIndex[$i]." ". $returnedData[$i];
+
 	}
 	
 	if ($SNMP_Walk_Matched == false) {
@@ -215,7 +247,6 @@ function putLastValue($metricName, $value, $LAST_VALUE_FILE,$CURRENT_TIME) {
 	
 		$stringData = $metricName."-utNetapp-".$value."-utNetapp-".	$CURRENT_TIME."\n";
 		
-		//echo  $metricName."-utNetapp-".$value."-utNetapp-".	$CURRENT_TIME."<BR>";
 		
 		fwrite($fh,$stringData);
 		fflush($fh);
@@ -230,12 +261,11 @@ function putLastValue($metricName, $value, $LAST_VALUE_FILE,$CURRENT_TIME) {
 
 function parseData($data) {
 	if(is_array($data)) {
-		$data_count=  count($data);
-		for($i=0; $i < $data_count; $i++) {
-			$data_output[$i] = strstr($data[$i], ':');
-			$data_output[$i] = substr($data_output[$i], 1);
-			$data_output[$i]=trim($data_output[$i]);
+		foreach (array_keys($data) as $i) {					//Added by Isaiah - iterate through the returned data
+			$id=substr($i,strripos($i,"."));				//Added by Isaiah - parse the returned oid to retain only the last integer as the row id
+			$data_output[$id] = trim(substr(strstr($data[$i], ':'), 1));	//Added by Isaiah - index the output data by the row id
 		}
+		
 	} else {
 		$data_output = strstr($data, ':');
 		$data_output = substr($data_output, 1);
@@ -262,6 +292,21 @@ function get64($msb, $lsb) {
 	return $value;
 }
 
+function handleError($errno, $errstr, $errfile, $errline, array $errcontext)
+{
+    // error was suppressed with the @-operator
+    if (0 === error_reporting()) {
+        return false;
+    }
+
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+}
+
+function exitWithUnknownStatus($msg)
+{
+	echo $msg;
+	exit(3);
+}
 
 
 
