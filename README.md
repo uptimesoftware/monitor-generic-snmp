@@ -11,8 +11,8 @@ plugin
 
 ### Version Compatibility
 
-
-  
+* Generic SNMP 1.3 - 7.3
+* Generic SNMP 1.2 - 7.3  
 * Generic SNMP 1.0 - 7.2
   
 
@@ -21,9 +21,17 @@ plugin
 This plug-in allows user to monitor any SNMP OID without having to add the MIB's to up.time. It also allows users to include filters so only certain data is included/excluded.
 
 
+### Improvements in v1.3 of Generic SNMP Monitor
+
+* PLUG-87 - Monitor will now return an UNKNOWN status if it's unable to retrive an OID due to timeout/connections on on the SNMP WALK/GET calls.
+* PLUG-100 - Fixed an issue where integers returned from a SNMP Get where not being properly retained for Graphing. As well situations where a valid 0 response from a SNMP Get would be returned as a CRIT.
+* PLUG-101 - Improved how the result of an SNMP Walk is matched to the SNMP Index Column
+
+
+
 ### Supported Monitoring Stations
 
-7.2
+* 7.3, 7.2
 
 ### Supported Agents
 None; no agent required
