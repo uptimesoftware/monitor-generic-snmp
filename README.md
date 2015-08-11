@@ -38,7 +38,7 @@ None; no agent required
 
 ### Installation Notes
 <p><a href="https://github.com/uptimesoftware/uptime-plugin-manager">Install using the up.time Plugin Manager</a></p>
-<p><a href="http://support.uptimesoftware.com/article.php?id=604">General Tips & Examples for Working with the Generic SNMP Plugin</a></p>
+<p><a href="http://docs.uptimesoftware.com/display/KB/Working+with+the+Generic+SNMP+plugin+monitor">Working with the Generic SNMP plugin monitor</a></p>
 
 
 ### Dependencies
